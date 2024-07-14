@@ -1,6 +1,6 @@
 pub type BSTPtr = Option<Box<BST>>;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BST {
     key: i64,
     left: BSTPtr,
@@ -47,10 +47,43 @@ mod tests {
 
         let mut tree: BSTPtr = None;
         for key in keys {
-            tree = Some(BST::insert(tree, key)?);
+            tree = BST::insert(tree, key);
         }
 
         tree
+    }
+
+    #[test]
+    fn test_insert() {
+        let mut tree: BSTPtr;
+
+        tree = BST::insert(None, 10);
+        match tree {
+            None => assert!(false),
+            Some(ref node) => {
+                assert_eq!(node.key, 10);
+                assert!(node.left.is_none());
+                assert!(node.right.is_none());
+            }
+        }
+
+        tree = BST::insert(tree, 5);
+        match tree {
+            None => assert!(false),
+            Some(ref node) => {
+                assert!(node.left.is_some());
+                assert!(node.right.is_none());
+            }
+        }
+
+        tree = BST::insert(tree, 20);
+        match tree {
+            None => assert!(false),
+            Some(node) => {
+                assert!(node.left.is_some());
+                assert!(node.right.is_some());
+            }
+        }
     }
 
     #[test]
